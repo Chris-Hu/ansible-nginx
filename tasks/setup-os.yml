@@ -1,0 +1,16 @@
+---
+- name: Enable nginx repo.
+  become: true
+  template:
+    src: nginx.repo.j2
+    dest: /etc/yum.repos.d/nginx.repo
+    owner: root
+    group: root
+    mode: 0644
+  when: nginx_yum_repo_enabled
+
+- name: Ensure nginx is installed.
+  become: true
+  yum:
+    name: "{{ nginx_package_name }}"
+    state: present
