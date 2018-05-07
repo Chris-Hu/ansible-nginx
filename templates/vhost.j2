@@ -24,6 +24,19 @@ server {
 
     index {{ item.index | default('index.html index.htm') }};
 
+{% block locations %}
+{% if item.locations is defined %}
+  {% for current in item.locations -%}
+        location {{ current.path }} {
+            {{ current.body }} 
+        }
+  {%- endfor %}
+
+
+{% endif %}
+{% endblock %}
+
+
 {% if item.error_page is defined %}
     error_page {{ item.error_page }};
 {% endif %}
