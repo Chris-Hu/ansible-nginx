@@ -6,4 +6,10 @@ nginx_mime_file_path: /etc/nginx/mime.types
 nginx_pidfile: /var/run/nginx.pid
 nginx_vhost_path: /etc/nginx/conf.d
 nginx_default_vhost_path: /etc/nginx/conf.d/default.conf
+nginx_php_fpm_block: |
+        fastcgi_pass unix:/var/run/php-fpm/php-fpm.sock;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+
 __nginx_user: "nginx"
