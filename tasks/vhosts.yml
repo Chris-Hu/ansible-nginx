@@ -27,6 +27,30 @@
   with_items: "{{ nginx_vhosts }}"
   notify: reload nginx
 
+- name: "Ensure vhost root directory exist"
+  stat:
+    path: "{{ item.root }}"
+  register: folder_stats
+  with_items: "{{ nginx_vhosts }}"
+
+- debug:
+    var: folder_stats
+    verbosity: 1   
+
+- name: "Creating root dir"
+  become: true
+  file:
+    path: "{{ item.item.root }}"
+    state: directory
+    mode: 0755
+    group: "{{ nginx_user }}"
+    owner: "{{ nginx_user }}"
+    recurse: yes
+  when: item.stat.exists == false
+  with_items:
+      - "{{ folder_stats.results }}"
+
+
 - name: Remove managed vhost config files.
   become: true
   file:
